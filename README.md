@@ -1,6 +1,10 @@
 # SnapSpot Nepal
 
-Find photo booths in Kathmandu. Search by area, filter by booth type and features, check prices, hours, and real user reviews. Business owners can claim their booth, and admins keep listings accurate by verifying details and handling reports.
+Finding photo booths in Kathmandu can be difficult because there is no centralized platform dedicated to them. Information is scattered across Google Maps, Reddit, Instagram, and word of mouth, making it hard for users to know which booths are nearby, how much they cost, what features they offer, or whether the information is still up to date.
+
+Seeing this gap, I decided to build SnapSpot Nepal — a platform that makes it easier for people to discover and compare photo booths in Kathmandu.
+
+Users can search by area, filter by booth type and features, compare prices and opening hours, and read real user reviews. Business owners can claim and update their booth listings, while admins can verify information and handle user reports to keep listings accurate and trustworthy.
 
 ## Tech Stack
 
