@@ -1,0 +1,216 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  BUSINESS_OWNER
+  ADMIN
+}
+
+enum BoothStatus {
+  ACTIVE
+  INACTIVE
+  CLOSED_PERMANENTLY
+}
+
+enum VerificationStatus {
+  VERIFIED
+  UNVERIFIED
+  NEEDS_VERIFICATION
+}
+
+enum ReviewStatus {
+  APPROVED
+  PENDING
+  FLAGGED
+}
+
+enum ReportType {
+  BUSINESS_CLOSED
+  WRONG_LOCATION
+  WRONG_PRICE
+  WRONG_HOURS
+  WRONG_PHONE
+  DUPLICATE
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  RESOLVED
+  REJECTED
+}
+
+enum ClaimStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String
+  name         String
+  role         Role          @default(USER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  reviews       Review[]
+  reports       Report[]
+  claims        BusinessClaim[]
+  verifications VerificationRecord[]
+}
+
+model Photobooth {
+  id                 String             @id @default(uuid())
+  name               String
+  slug               String             @unique
+  description        String
+  address            String
+  area               String
+  district           String
+  latitude           Float
+  longitude          Float
+  phone              String?
+  website            String?
+  instagram          String?
+  priceFrom          Int?
+  priceTo            Int?
+  currency           String             @default("NPR")
+  boothTypeId        String
+  status             BoothStatus        @default(ACTIVE)
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  isDemoData         Boolean            @default(false)
+  verifiedBySource   String?
+  lastVerifiedAt     DateTime?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  boothType          BoothType          @relation(fields: [boothTypeId], references: [id])
+  features           PhotoboothFeature[]
+  photos             Photo[]
+  openingHours       OpeningHours[]
+  reviews            Review[]
+  reports            Report[]
+  claims             BusinessClaim[]
+  verifications      VerificationRecord[]
+
+  @@index([area])
+  @@index([district])
+  @@index([verificationStatus])
+}
+
+model BoothType {
+  id          String       @id @default(uuid())
+  name        String       @unique
+  slug        String       @unique
+  description String?
+  booths      Photobooth[]
+}
+
+model Feature {
+  id       String              @id @default(uuid())
+  name     String              @unique
+  slug     String              @unique
+  category String              @default("general")
+  booths   PhotoboothFeature[]
+}
+
+model PhotoboothFeature {
+  boothId   String
+  featureId String
+
+  booth   Photobooth @relation(fields: [boothId], references: [id], onDelete: Cascade)
+  feature Feature    @relation(fields: [featureId], references: [id], onDelete: Cascade)
+
+  @@id([boothId, featureId])
+}
+
+model Photo {
+  id        String     @id @default(uuid())
+  boothId   String
+  url       String
+  caption   String?
+  isPrimary Boolean    @default(false)
+  createdAt DateTime   @default(now())
+
+  booth Photobooth @relation(fields: [boothId], references: [id], onDelete: Cascade)
+}
+
+model OpeningHours {
+  id        String     @id @default(uuid())
+  boothId   String
+  dayOfWeek Int
+  openTime  String
+  closeTime String
+  isClosed  Boolean    @default(false)
+
+  booth Photobooth @relation(fields: [boothId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id             String       @id @default(uuid())
+  boothId        String
+  userId         String
+  rating         Int
+  comment        String
+  photoUrl       String?
+  status         ReviewStatus @default(APPROVED)
+  ownerReply     String?
+  ownerRepliedAt DateTime?
+  createdAt      DateTime     @default(now())
+
+  booth Photobooth @relation(fields: [boothId], references: [id], onDelete: Cascade)
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Report {
+  id        String       @id @default(uuid())
+  boothId   String
+  userId    String?
+  issueType ReportType
+  comment   String
+  status    ReportStatus @default(PENDING)
+  createdAt DateTime     @default(now())
+
+  booth Photobooth @relation(fields: [boothId], references: [id], onDelete: Cascade)
+  user  User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model BusinessClaim {
+  id           String      @id @default(uuid())
+  boothId      String
+  userId       String
+  status       ClaimStatus @default(PENDING)
+  proofDetails String
+  createdAt    DateTime    @default(now())
+
+  booth Photobooth @relation(fields: [boothId], references: [id], onDelete: Cascade)
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationRecord {
+  id              String     @id @default(uuid())
+  boothId         String
+  verifiedByUserId String
+  notes           String?
+  verifiedAt      DateTime   @default(now())
+
+  booth Photobooth @relation(fields: [boothId], references: [id], onDelete: Cascade)
+  user  User       @relation(fields: [verifiedByUserId], references: [id], onDelete: Cascade)
+}
+
+model SearchEvent {
+  id        String   @id @default(uuid())
+  query     String?
+  area      String?
+  filters   String?
+  createdAt DateTime @default(now())
+}
