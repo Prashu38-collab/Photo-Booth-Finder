@@ -204,7 +204,7 @@ export default function BoothDetailPage({ params }: { params: Promise<{ slug: st
               href={`https://www.google.com/maps/dir/?api=1&destination=${booth.latitude},${booth.longitude}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-bold text-xs flex items-center gap-2 shadow-md transition-all"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-maroonDark hover:from-maroonDark hover:to-moodsoft text-white font-bold text-xs flex items-center gap-2 shadow-md transition-all"
             >
               <Navigation className="w-4 h-4" />
               <span>Get Directions</span>
@@ -399,7 +399,7 @@ export default function BoothDetailPage({ params }: { params: Promise<{ slug: st
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-slate-700 hover:text-rose-600"
               >
-                <Instagram className="w-4 h-4 text-pink-500" />
+                <Instagram className="w-4 h-4 text-maroon" />
                 <span className="font-semibold">{booth.instagram}</span>
               </a>
             )}

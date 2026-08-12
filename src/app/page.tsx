@@ -56,7 +56,7 @@ export default function HomePage() {
       <section className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-rose-50/60 via-white to-slate-50 border-b border-slate-100 overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-rose-200/40 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 -left-24 w-80 h-80 bg-pink-200/30 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 -left-24 w-80 h-80 bg-rose-200/30 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-4xl mx-auto text-center space-y-8 relative z-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-100/80 text-rose-800 text-xs font-semibold border border-rose-200 shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">
@@ -108,7 +108,7 @@ export default function HomePage() {
 
             <button
               type="submit"
-              className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 shrink-0"
+              className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-rose-600 to-maroonDark hover:from-maroonDark hover:to-moodsoft text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 shrink-0"
             >
               <span>Find Booths</span>
               <ArrowRight className="w-4 h-4" />

@@ -305,7 +305,7 @@ export default function BusinessDashboardPage() {
 
                   <div>
                     <label className="block font-semibold text-slate-700 mb-1 flex items-center gap-1">
-                      <Instagram className="w-3.5 h-3.5 text-pink-500" /> Instagram Handle
+                      <Instagram className="w-3.5 h-3.5 text-maroon" /> Instagram Handle
                     </label>
                     <input
                       type="text"

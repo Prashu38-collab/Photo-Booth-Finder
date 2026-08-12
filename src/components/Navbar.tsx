@@ -44,7 +44,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-pink-500 flex items-center justify-center text-white shadow-md shadow-rose-200 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-maroonDark flex items-center justify-center text-white shadow-md shadow-rose-200 group-hover:scale-105 transition-transform">
               <Camera className="w-5 h-5" />
             </div>
             <div>
@@ -69,7 +69,7 @@ export function Navbar() {
 
             <Link
               href="/recommend"
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-semibold bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-sm hover:shadow hover:opacity-95 transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-semibold bg-gradient-to-r from-rose-500 to-maroonDark text-white shadow-sm hover:shadow hover:opacity-95 transition-all"
             >
               <Sparkles className="w-4 h-4 text-amber-200 animate-pulse" />
               <span>Find Me a Booth</span>

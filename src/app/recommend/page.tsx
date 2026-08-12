@@ -123,7 +123,7 @@ export default function RecommendationPage() {
           </div>
           <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
             <div
-              className="bg-gradient-to-r from-rose-500 to-pink-500 h-full transition-all duration-300"
+              className="bg-gradient-to-r from-rose-500 to-maroonDark h-full transition-all duration-300"
               style={{ width: `${(step / 5) * 100}%` }}
             />
           </div>
@@ -382,7 +382,7 @@ export default function RecommendationPage() {
             <button
               onClick={handleGenerateRecommendations}
               disabled={loading}
-              className="px-8 py-3 text-sm font-extrabold text-white bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 rounded-2xl shadow-lg transition-transform hover:scale-105 flex items-center gap-2"
+              className="px-8 py-3 text-sm font-extrabold text-white bg-gradient-to-r from-rose-600 to-maroonDark hover:from-maroonDark hover:to-moodsoft rounded-2xl shadow-lg transition-transform hover:scale-105 flex items-center gap-2"
             >
               <Sparkles className="w-4 h-4 text-amber-200" />
               <span>{loading ? 'Calculating Matches...' : 'Find My Matches'}</span>
