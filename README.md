@@ -8,6 +8,8 @@ Find photo booths in Kathmandu. Search by area, filter by booth type and feature
 - **Prisma** with **PostgreSQL**
 - **Tailwind CSS** + **Leaflet** maps
 - **JWT** session auth with role-based access (USER / BUSINESS_OWNER / ADMIN)
+- Email verification & password reset via **Nodemailer** (SMTP)
+- Auto-geocoding of booth addresses via **Photon** (OpenStreetMap)
 - **Vitest** for tests
 
 ## Getting Started
@@ -30,6 +32,14 @@ Find photo booths in Kathmandu. Search by area, filter by booth type and feature
    DATABASE_URL="postgresql://<user>:<password>@localhost:5432/snapspot_nepal"
    JWT_SECRET="some-long-random-secret"
    NEXT_PUBLIC_APP_URL="http://localhost:3000"
+
+   # Optional — only needed to actually send emails (verification / password reset).
+   # Without these, the app prints the links to the console instead.
+   SMTP_HOST="smtp.gmail.com"
+   SMTP_PORT="587"
+   SMTP_USER="your@gmail.com"
+   SMTP_PASS="your-app-password"
+   SMTP_FROM="SnapSpot Nepal <your@gmail.com>"
    ```
 
 4. Push the schema and seed demo data:
@@ -66,8 +76,11 @@ All seeded users share the password `password123`:
 - **Favorites** – save booths you like.
 - **Recommendations** – get booth suggestions based on your search.
 - **Login / Register** – sign up as a user or business owner (admin role can't be self-assigned).
+- **Email verification** – new accounts must verify their email before they can sign in.
+- **Password reset** – "forgot password" flow sends a reset link; links expire in 1 hour.
+- **Auto-geocoding** – booth addresses are looked up on the map automatically (seed + business edits).
 - **Admin dashboard** – analytics, verify booths, resolve reports, moderate reviews.
-- **Business dashboard** – manage your claimed booth's details, hours, and photos.
+- **Business dashboard** – manage your claimed booth's details, hours, photos, and address.
 
 ## Limitations
 
@@ -76,15 +89,14 @@ This project doesn't do these things (yet):
 - **No booking or payments** – prices are for reference only; you can't book a booth or pay through the app.
 - **No real photo galleries** – booth listings use placeholder images; owners can't upload photos yet.
 - **No review photo uploads** – review photo fields exist in the DB but there's no upload flow.
-- **No email verification or password reset** – accounts are created directly; no OTP, verify emails, or "forgot password".
 - **No third-party login** – Google/Facebook sign-in isn't supported.
 - **No notifications** – no emails, SMS, or push for claim approvals, report updates, or replies.
 - **Limited coverage** – data is demo/seed data for Kathmandu only; many booths are unverified, so prices and hours may be outdated.
-- **No auto-geocoding** – coordinates are entered manually during seeding, not looked up from an address.
 - **No rate limiting** – public APIs have no throttling (not production-ready for spam protection).
 - **No full-text search** – search is simple filtering, not a search engine.
 - **No mobile app** – web only, not fully optimized as an offline PWA.
 - **Not deployed** – no production hosting, Docker setup, or CI/CD pipeline.
+- **Emails in dev** – without SMTP config, verification/reset links are only printed to the console.
 
 ## Project Structure
 

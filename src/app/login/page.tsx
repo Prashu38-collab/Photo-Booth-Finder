@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Camera, Lock, Mail, Shield, Store, User } from 'lucide-react';
+import { Camera, Lock, Mail, Shield, Store, User, RefreshCw } from 'lucide-react';
 
 function getRoleRedirect(role: string): string {
   if (role === 'ADMIN') return '/admin/dashboard';
@@ -15,6 +15,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [needsVerification, setNeedsVerification] = useState<boolean>(false);
+  const [resending, setResending] = useState<boolean>(false);
+  const [resendMessage, setResendMessage] = useState<string>('');
 
   const handleQuickDemoLogin = async (demoEmail: string) => {
     setLoading(true);
@@ -35,6 +38,28 @@ export default function LoginPage() {
     }
   };
 
+  const handleResend = async () => {
+    if (!email) {
+      setResendMessage('Enter your email address first.');
+      return;
+    }
+    setResending(true);
+    setResendMessage('');
+    try {
+      const res = await fetch('/api/auth/resend-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      setResendMessage(data.message || data.error || 'Verification email sent.');
+    } catch {
+      setResendMessage('Something went wrong. Please try again.');
+    } finally {
+      setResending(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
@@ -44,6 +69,7 @@ export default function LoginPage() {
 
     setLoading(true);
     setError('');
+    setNeedsVerification(false);
 
     try {
       const res = await fetch('/api/auth/login', {
@@ -52,7 +78,13 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Login failed.');
+      if (!res.ok) {
+        if (data.code === 'EMAIL_NOT_VERIFIED') {
+          setNeedsVerification(true);
+          throw new Error(data.error);
+        }
+        throw new Error(data.error || 'Login failed.');
+      }
       window.location.href = getRoleRedirect(data.data.user.role);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error logging in.');
@@ -105,6 +137,22 @@ export default function LoginPage() {
           </div>
         )}
 
+        {needsVerification && (
+          <div className="bg-amber-50 text-amber-800 text-xs p-3 rounded-xl border border-amber-200 space-y-2">
+            <p>You can sign in once your email is verified.</p>
+            <button
+              type="button"
+              onClick={handleResend}
+              disabled={resending}
+              className="inline-flex items-center gap-1.5 font-bold text-amber-700 hover:underline disabled:opacity-50"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${resending ? 'animate-spin' : ''}`} />
+              {resending ? 'Sending...' : 'Resend verification email'}
+            </button>
+            {resendMessage && <p className="text-amber-700 font-semibold">{resendMessage}</p>}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
             <label className="block font-semibold text-slate-700 mb-1">Email Address</label>
@@ -120,18 +168,21 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div>
-            <label className="block font-semibold text-slate-700 mb-1">Password</label>
-            <div className="relative">
-              <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500 focus:outline-none"
-              />
-            </div>
+          <div className="flex items-center justify-between">
+            <label className="block font-semibold text-slate-700">Password</label>
+            <Link href="/forgot-password" className="text-rose-600 hover:underline">
+              Forgot password?
+            </Link>
+          </div>
+          <div className="relative">
+            <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500 focus:outline-none"
+            />
           </div>
 
           <button

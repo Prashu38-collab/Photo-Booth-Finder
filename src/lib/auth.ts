@@ -46,6 +46,7 @@ export async function getAuthUser(req: NextRequest) {
       email: true,
       name: true,
       role: true,
+      emailVerifiedAt: true,
     },
   });
 

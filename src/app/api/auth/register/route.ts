@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import { db } from '@/lib/db';
-import { generateToken } from '@/lib/auth';
 import { Role } from '@prisma/client';
+import { sendVerificationEmail } from '@/lib/email';
+
+const TOKEN_EXPIRY_MS = 24 * 60 * 60 * 1000;
 
 export async function POST(req: NextRequest) {
   try {
@@ -40,26 +43,31 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const token = generateToken({
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-    });
-
-    const res = NextResponse.json({
+    const token = crypto.randomBytes(32).toString('hex');
+    await db.emailVerificationToken.create({
       data: {
-        user: { id: user.id, email: user.email, name: user.name, role: user.role },
+        userId: user.id,
         token,
+        expiresAt: new Date(Date.now() + TOKEN_EXPIRY_MS),
       },
     });
 
-    res.cookies.set('snapspot_token', token, {
-      httpOnly: true,
-      path: '/',
-      maxAge: 7 * 24 * 60 * 60,
-    });
+    // Email delivery must never block account creation (dev has no SMTP).
+    try {
+      await sendVerificationEmail(user.email, user.name, token);
+    } catch (error) {
+      console.error('Error sending verification email:', error);
+    }
 
-    return res;
+    return NextResponse.json(
+      {
+        data: {
+          user: { id: user.id, email: user.email, name: user.name, role: user.role },
+        },
+        message: 'Account created. Please check your email to verify your account.',
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error registering user:', error);
     return NextResponse.json({ error: 'Failed to register account.' }, { status: 500 });

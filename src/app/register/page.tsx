@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Camera, Lock, Mail, User, Store } from 'lucide-react';
+import { Camera, Lock, Mail, User, Store, MailCheck } from 'lucide-react';
 
 export default function RegisterPage() {
   const [name, setName] = useState<string>('');
@@ -11,6 +11,7 @@ export default function RegisterPage() {
   const [role, setRole] = useState<string>('USER');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [registered, setRegistered] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,13 +32,38 @@ export default function RegisterPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Registration failed.');
 
-      window.location.href = data.data.user.role === 'BUSINESS_OWNER' ? '/business/dashboard' : '/explore';
+      setRegistered(email);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error registering account.');
     } finally {
       setLoading(false);
     }
   };
+
+  if (registered) {
+    return (
+      <div className="max-w-md mx-auto px-4 py-16">
+        <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl space-y-4 text-center">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mx-auto shadow-md">
+            <MailCheck className="w-6 h-6" />
+          </div>
+          <h1 className="text-2xl font-black text-slate-900">Check Your Email</h1>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            We sent a verification link to <span className="font-bold text-slate-700">{registered}</span>.
+            Click the link to activate your account, then sign in.
+          </p>
+          <p className="text-[11px] text-slate-400">Didn&apos;t get it? Head to the sign in page and use
+            the &quot;Resend verification email&quot; option.</p>
+          <Link
+            href="/login"
+            className="block w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow transition-colors"
+          >
+            Go to Sign In
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-md mx-auto px-4 py-16">
