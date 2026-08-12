@@ -8,9 +8,6 @@ tsconfig.tsbuildinfo
 .env
 .env.*
 
-# Keep the example env file so setup is documented
-!.env.example
-
 Python
 __pycache__/
 *.pyc
