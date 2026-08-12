@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Camera, Lock, Mail, Shield, Store, User, RefreshCw } from 'lucide-react';
+import { Camera, Lock, Mail, RefreshCw } from 'lucide-react';
 
 function getRoleRedirect(role: string): string {
   if (role === 'ADMIN') return '/admin/dashboard';
@@ -18,25 +18,6 @@ export default function LoginPage() {
   const [needsVerification, setNeedsVerification] = useState<boolean>(false);
   const [resending, setResending] = useState<boolean>(false);
   const [resendMessage, setResendMessage] = useState<string>('');
-
-  const handleQuickDemoLogin = async (demoEmail: string) => {
-    setLoading(true);
-    setError('');
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: demoEmail, password: 'password123' }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Login failed.');
-      window.location.href = getRoleRedirect(data.data.user.role);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error logging in.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleResend = async () => {
     if (!email) {
@@ -102,33 +83,6 @@ export default function LoginPage() {
           </div>
           <h1 className="text-2xl font-black text-slate-900">Welcome Back</h1>
           <p className="text-xs text-slate-500">Sign in to your SnapSpot Nepal account</p>
-        </div>
-
-        {/* Quick Demo Switcher */}
-        <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200 space-y-2">
-          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block text-center">
-            One-Click Demo Roles
-          </span>
-          <div className="grid grid-cols-3 gap-1.5 text-[11px]">
-            <button
-              onClick={() => handleQuickDemoLogin('user@gmail.com')}
-              className="py-1.5 px-2 bg-white hover:bg-slate-100 text-slate-700 font-semibold rounded-xl border border-slate-200 flex items-center justify-center gap-1"
-            >
-              <User className="w-3.5 h-3.5 text-slate-500" /> Customer
-            </button>
-            <button
-              onClick={() => handleQuickDemoLogin('owner@banhanstudio.np')}
-              className="py-1.5 px-2 bg-blue-50 hover:bg-blue-100 text-blue-800 font-semibold rounded-xl border border-blue-200 flex items-center justify-center gap-1"
-            >
-              <Store className="w-3.5 h-3.5 text-blue-600" /> Owner
-            </button>
-            <button
-              onClick={() => handleQuickDemoLogin('admin@snapspot.np')}
-              className="py-1.5 px-2 bg-purple-50 hover:bg-purple-100 text-purple-800 font-semibold rounded-xl border border-purple-200 flex items-center justify-center gap-1"
-            >
-              <Shield className="w-3.5 h-3.5 text-purple-600" /> Admin
-            </button>
-          </div>
         </div>
 
         {error && (
