@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { requireRole } from '@/lib/auth';
 import { Role } from '@prisma/client';
+import { geocodeAddress } from '@/lib/geocode';
 
 export async function PATCH(
   req: NextRequest,
@@ -20,6 +21,21 @@ export async function PATCH(
       return NextResponse.json({ error: 'Photo booth not found.' }, { status: 404 });
     }
 
+    let address = body.address || booth.address;
+    let latitude = booth.latitude;
+    let longitude = booth.longitude;
+    if (body.address && body.address.trim() !== booth.address) {
+      const geo = await geocodeAddress(body.address);
+      if (!geo) {
+        return NextResponse.json(
+          { error: "Couldn't locate that address. Please check the address and try again." },
+          { status: 400 }
+        );
+      }
+      latitude = geo.lat;
+      longitude = geo.lng;
+    }
+
     const updated = await db.photobooth.update({
       where: { id },
       data: {
@@ -29,6 +45,9 @@ export async function PATCH(
         phone: body.phone || booth.phone,
         instagram: body.instagram || booth.instagram,
         website: body.website || booth.website,
+        address,
+        latitude,
+        longitude,
         verificationStatus: user.role === 'ADMIN' ? booth.verificationStatus : 'NEEDS_VERIFICATION',
         updatedAt: new Date(),
       },

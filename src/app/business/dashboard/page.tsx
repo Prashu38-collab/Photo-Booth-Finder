@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Store, ShieldAlert, CheckCircle2, Edit3, DollarSign, Clock, Phone, Instagram, Send } from 'lucide-react';
+import { Store, ShieldAlert, CheckCircle2, Edit3, DollarSign, Clock, Phone, Instagram, Send, MapPin } from 'lucide-react';
 import { BoothCardData } from '@/components/BoothCard';
 
 export default function BusinessDashboardPage() {
@@ -22,6 +22,7 @@ export default function BusinessDashboardPage() {
   const [description, setDescription] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [instagram, setInstagram] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
   const [saving, setSaving] = useState<boolean>(false);
   const [saveMsg, setSaveMsg] = useState<string>('');
 
@@ -55,6 +56,7 @@ export default function BusinessDashboardPage() {
     setDescription(b.description || '');
     setPhone(b.phone || '');
     setInstagram(b.instagram || '');
+    setAddress(b.address || '');
   };
 
   const handleSelectBoothChange = (id: string) => {
@@ -98,11 +100,15 @@ export default function BusinessDashboardPage() {
           description,
           phone,
           instagram,
+          address,
         }),
       });
 
+      const data = await res.json();
       if (res.ok) {
         setSaveMsg('Updates saved! Information status set to Needs Verification pending audit.');
+      } else {
+        setSaveMsg(data.error || 'Failed to save updates.');
       }
     } catch {
       setSaveMsg('Failed to save updates.');
@@ -264,6 +270,23 @@ export default function BusinessDashboardPage() {
                     rows={4}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-slate-700 mb-1">Address</label>
+                  <div className="relative">
+                    <MapPin className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      placeholder="Room 415, 4th Floor, Civil Mall, Sundhara, Kathmandu"
+                      className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    />
+                  </div>
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    Saving a changed address auto-locates it on the map.
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

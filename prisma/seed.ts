@@ -1,5 +1,6 @@
 import { PrismaClient, Role, BoothStatus, VerificationStatus, ReportType, ReportStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { geocodeAddress } from '../src/lib/geocode';
 
 const prisma = new PrismaClient();
 
@@ -53,6 +54,7 @@ async function main() {
 
   // 2. Create Users (Admin, Business Owner, Normal User)
   const passwordHash = await bcrypt.hash('password123', 10);
+  const emailVerifiedAt = new Date();
 
   const admin = await prisma.user.create({
     data: {
@@ -60,6 +62,7 @@ async function main() {
       name: 'Admin SnapSpot',
       passwordHash,
       role: Role.ADMIN,
+      emailVerifiedAt,
     },
   });
 
@@ -69,6 +72,7 @@ async function main() {
       name: 'Banhan Studio Owner',
       passwordHash,
       role: Role.BUSINESS_OWNER,
+      emailVerifiedAt,
     },
   });
 
@@ -78,6 +82,7 @@ async function main() {
       name: 'Aarav Sharma',
       passwordHash,
       role: Role.USER,
+      emailVerifiedAt,
     },
   });
 
@@ -341,6 +346,20 @@ async function main() {
 
   for (const b of booths) {
     const boothTypeId = boothTypeMap[b.boothTypeSlug];
+
+    // Auto-geocode the address; fall back to the researched seed coordinates
+    // when the lookup fails or the address is too vague.
+    let latitude = b.latitude;
+    let longitude = b.longitude;
+    const geo = await geocodeAddress(b.address);
+    if (geo) {
+      latitude = geo.lat;
+      longitude = geo.lng;
+      console.log(`✅ Geocoded "${b.name}" -> ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`);
+    } else {
+      console.warn(`⚠️ Could not geocode "${b.name}", keeping seed coordinates.`);
+    }
+
     const createdBooth = await prisma.photobooth.create({
       data: {
         name: b.name,
@@ -349,8 +368,8 @@ async function main() {
         address: b.address,
         area: b.area,
         district: b.district,
-        latitude: b.latitude,
-        longitude: b.longitude,
+        latitude,
+        longitude,
         phone: b.phone,
         instagram: b.instagram,
         website: b.website,
