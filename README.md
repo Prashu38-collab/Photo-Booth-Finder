@@ -69,6 +69,23 @@ All seeded users share the password `password123`:
 - **Admin dashboard** – analytics, verify booths, resolve reports, moderate reviews.
 - **Business dashboard** – manage your claimed booth's details, hours, and photos.
 
+## Limitations
+
+This project doesn't do these things (yet):
+
+- **No booking or payments** – prices are for reference only; you can't book a booth or pay through the app.
+- **No real photo galleries** – booth listings use placeholder images; owners can't upload photos yet.
+- **No review photo uploads** – review photo fields exist in the DB but there's no upload flow.
+- **No email verification or password reset** – accounts are created directly; no OTP, verify emails, or "forgot password".
+- **No third-party login** – Google/Facebook sign-in isn't supported.
+- **No notifications** – no emails, SMS, or push for claim approvals, report updates, or replies.
+- **Limited coverage** – data is demo/seed data for Kathmandu only; many booths are unverified, so prices and hours may be outdated.
+- **No auto-geocoding** – coordinates are entered manually during seeding, not looked up from an address.
+- **No rate limiting** – public APIs have no throttling (not production-ready for spam protection).
+- **No full-text search** – search is simple filtering, not a search engine.
+- **No mobile app** – web only, not fully optimized as an offline PWA.
+- **Not deployed** – no production hosting, Docker setup, or CI/CD pipeline.
+
 ## Project Structure
 
 ```
