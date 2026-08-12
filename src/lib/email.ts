@@ -54,21 +54,21 @@ export async function sendVerificationEmail(to: string, name: string, token: str
   const subject = 'Verify your SnapSpot Nepal email';
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">
-      <h2 style="color: #e11d48;">SnapSpot Nepal</h2>
+      <h2 style="color: #7a3b3b;">SnapSpot Nepal</h2>
       <p>Hi ${name},</p>
       <p>Please confirm your email address to activate your account.</p>
       <p>
         <a href="${url}"
-           style="display: inline-block; background: #0f172a; color: #fff; padding: 12px 24px;
+           style="display: inline-block; background: #262626; color: #fff; padding: 12px 24px;
                   border-radius: 8px; text-decoration: none; font-weight: bold;">
           Verify Email
         </a>
       </p>
-      <p style="color: #64748b; font-size: 12px;">
+      <p style="color: #575757; font-size: 12px;">
         Or copy this link: <a href="${url}">${url}</a><br/>
         This link expires in 24 hours.
       </p>
-      <p style="color: #64748b; font-size: 12px;">If you didn't create this account, you can ignore this email.</p>
+      <p style="color: #575757; font-size: 12px;">If you didn't create this account, you can ignore this email.</p>
     </div>
   `;
 
@@ -86,17 +86,17 @@ export async function sendPasswordResetEmail(to: string, name: string, token: st
   const subject = 'Reset your SnapSpot Nepal password';
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">
-      <h2 style="color: #e11d48;">SnapSpot Nepal</h2>
+      <h2 style="color: #7a3b3b;">SnapSpot Nepal</h2>
       <p>Hi ${name},</p>
       <p>We received a request to reset your password. Click the button below to choose a new one.</p>
       <p>
         <a href="${url}"
-           style="display: inline-block; background: #0f172a; color: #fff; padding: 12px 24px;
+           style="display: inline-block; background: #262626; color: #fff; padding: 12px 24px;
                   border-radius: 8px; text-decoration: none; font-weight: bold;">
           Reset Password
         </a>
       </p>
-      <p style="color: #64748b; font-size: 12px;">
+      <p style="color: #575757; font-size: 12px;">
         Or copy this link: <a href="${url}">${url}</a><br/>
         This link expires in 1 hour. If you didn't request this, you can ignore this email.
       </p>

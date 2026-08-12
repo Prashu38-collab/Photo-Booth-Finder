@@ -103,7 +103,7 @@ async function main() {
     const created = await prisma.boothType.create({ data: bt });
     boothTypeMap[bt.slug] = created.id;
   }
-  console.log('✅ Created booth types');
+  console.log('Created booth types');
 
   // 4. Create Features
   const featuresData = [
@@ -129,7 +129,7 @@ async function main() {
     const created = await prisma.feature.create({ data: f });
     featureMap[f.slug] = created.id;
   }
-  console.log('✅ Created features');
+  console.log('Created features');
 
   // 5. Seed Real Verified Photobooths in Kathmandu District
   // All listings below were researched against public sources:
@@ -355,9 +355,9 @@ async function main() {
     if (geo) {
       latitude = geo.lat;
       longitude = geo.lng;
-      console.log(`✅ Geocoded "${b.name}" -> ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`);
+      console.log(`Geocoded "${b.name}" -> ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`);
     } else {
-      console.warn(`⚠️ Could not geocode "${b.name}", keeping seed coordinates.`);
+      console.warn(`Could not geocode "${b.name}", keeping seed coordinates.`);
     }
 
     const createdBooth = await prisma.photobooth.create({
@@ -453,7 +453,7 @@ async function main() {
     console.log(' Created sample report for admin moderation testing');
   }
 
-  console.log('🎉 Seeding completed successfully!');
+  console.log('Seeding completed successfully!');
 }
 
 main()
