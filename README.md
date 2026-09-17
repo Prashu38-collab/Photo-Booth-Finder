@@ -2,7 +2,7 @@
 
 Finding photo booths in Kathmandu can be difficult because there is no centralized platform dedicated to them. Information is scattered across Google Maps, Reddit, Instagram, and word of mouth, making it hard for users to know which booths are nearby, how much they cost, what features they offer, or whether the information is still up to date.
 
-Seeing this gap, I decided to build SnapSpot Nepal — a platform that makes it easier for people to discover and compare photo booths in Kathmandu.
+Seeing this gap, I decided to build SnapSpot Nepal, a platform that makes it easier for people to discover and compare photo booths in Kathmandu.
 
 Users can search by area, filter by booth type and features, compare prices and opening hours, and read real user reviews. Business owners can claim and update their booth listings, while admins can verify information and handle user reports to keep listings accurate and trustworthy.
 
@@ -78,11 +78,6 @@ All seeded users share the password `password123`:
 - **Reviews** – rate booths with comments; moderation handled by admins.
 - **Report a problem** – flag wrong prices, hours, location, or a closed business.
 - **Favorites** – save booths you like.
-- **Recommendations** – get booth suggestions based on your search.
-- **Login / Register** – sign up as a user or business owner (admin role can't be self-assigned).
-- **Email verification** – new accounts must verify their email before they can sign in.
-- **Password reset** – "forgot password" flow sends a reset link; links expire in 1 hour.
-- **Auto-geocoding** – booth addresses are looked up on the map automatically (seed + business edits).
 - **Admin dashboard** – analytics, verify booths, resolve reports, moderate reviews.
 - **Business dashboard** – manage your claimed booth's details, hours, photos, and address.
 
