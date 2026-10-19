@@ -86,6 +86,7 @@ All seeded users share the password `password123`:
 This project doesn't do these things (yet):
 
 - **No booking or payments** – prices are for reference only; you can't book a booth or pay through the app.
+- it is only limited to kathmandu
 - **No real photo galleries** – booth listings use placeholder images; owners can't upload photos yet.
 - **No review photo uploads** – review photo fields exist in the DB but there's no upload flow.
 - **No third-party login** – Google/Facebook sign-in isn't supported.
